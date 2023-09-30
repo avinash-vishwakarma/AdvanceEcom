@@ -15,7 +15,7 @@ const Alert = ({ error }) => {
         className="alert custom-alert-1 alert-danger alert-dismissible fade show"
         role="alert"
       >
-        <i class="bi bi-x-circle"></i>
+        <i className="bi bi-x-circle"></i>
         {error?.response?.data.message}
         <button
           className="btn btn-close position-relative p-1 ms-auto"

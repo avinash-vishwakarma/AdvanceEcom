@@ -9,7 +9,7 @@ const Header = ({ toggleSlider }) => {
           {/*  Logo Wrapper  */}
           <div className="logo-wrapper">
             <a href="home.html">
-              <img src="img/core-img/logo.png" alt="" />
+              <img src="/img/core-img/logo.png" alt="" />
             </a>
           </div>
 

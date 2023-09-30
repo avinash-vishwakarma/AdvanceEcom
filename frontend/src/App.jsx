@@ -4,6 +4,7 @@ import {
   RouterProvider,
   createRoutesFromElements,
   createBrowserRouter,
+  useNavigate,
 } from "react-router-dom";
 import axios from "axios";
 
@@ -24,6 +25,13 @@ import VerifyEmail from "./pages/auth/VerifyEmail";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
 import NotFound from "./pages/errors/NotFound";
+import UserProfile from "./pages/User/UserProfile";
+import AdminDashBoard from "./pages/Admin/AdminDashBoard";
+import AdminAddCateogry from "./pages/Admin/Category/AdminAddCateogry";
+import AdminCategorys from "./pages/Admin/Category/AdminCategorys";
+import cateoryPageLoader from "./loaders/categoryPageLoader";
+import AdminUpdateCategory from "./pages/Admin/Category/AdminUpdateCategory";
+import adminUpdateLoader from "./loaders/adminUpdateLoader";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -50,7 +58,10 @@ const App = () => {
         })
         .catch((err) => {
           // session expired
-          dispatch(logout());
+          axios.post("/logout").then(() => {
+            dispatch(logout());
+          });
+          return null;
         });
     } else if (localUser) {
       dispatch(setUser(localUser));
@@ -61,9 +72,11 @@ const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" loader={rootPageLoader} element={<RootLayout />}>
+        {/* genralLayout */}
         <Route element={<GenralLayout />}>
           <Route index element={<Home />} />
         </Route>
+        {/* guest */}
         <Route element={<Protected guest />}>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -71,11 +84,36 @@ const App = () => {
           <Route path="/password-reset/:token" element={<ResetPassword />} />
         </Route>
 
-        <Route element={<Protected auth />}>
+        {/* auth */}
+
+        <Route element={<Protected redirect="/login" auth />}>
           <Route path="/logout" element={<Logout />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
+          {/* auth | GenralLayout */}
+          <Route element={<GenralLayout />}>
+            <Route path="/user-profile" element={<UserProfile />} />
+            <Route element={<Protected admin />} path="/admin">
+              <Route path="dashboard" element={<AdminDashBoard />} />
+              <Route path="categorys">
+                <Route
+                  index
+                  element={<AdminCategorys />}
+                  loader={cateoryPageLoader}
+                />
+                <Route path="add" element={<AdminAddCateogry />} />
+                <Route
+                  path="update/:id"
+                  loader={adminUpdateLoader}
+                  element={<AdminUpdateCategory />}
+                />
+              </Route>
+            </Route>
+          </Route>
         </Route>
 
+        {/* auth | admin | GenralLayout */}
+
+        {/* Genral Layout */}
         <Route element={<GenralLayout />}>
           <Route path="*" element={<NotFound />} />
         </Route>

@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -8,10 +9,10 @@ const Footer = () => {
         <div className="footer-nav position-relative">
           <ul className="h-100 d-flex align-items-center justify-content-between ps-0">
             <li className="active">
-              <a href="home.html">
+              <NavLink to="/">
                 <i className="bi bi-house"></i>
                 <span>Home</span>
-              </a>
+              </NavLink>
             </li>
 
             <li>
@@ -36,10 +37,10 @@ const Footer = () => {
             </li>
 
             <li>
-              <a href="settings.html">
-                <i className="bi bi-gear"></i>
-                <span>Settings</span>
-              </a>
+              <NavLink to="/user-profile">
+                <i className="bi bi-person-circle"></i>
+                <span>Profile</span>
+              </NavLink>
             </li>
           </ul>
         </div>

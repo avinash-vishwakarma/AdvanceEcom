@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -28,5 +29,9 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         //
+
+        Gate::define('admin',function($user){
+            return $user->hasRole('admin');
+        });
     }
 }

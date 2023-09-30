@@ -1,6 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Outlet } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
+import hasRole from "../Helper/hasRole";
+
 import NotFound from "../pages/errors/NotFound";
 
 const Protected = (props) => {
@@ -14,14 +16,23 @@ const Protected = (props) => {
   }
 
   if (props.auth) {
-    console.log(auth);
     isValid = auth.isLogin;
+  }
+
+  if (props.admin) {
+    // get the global sate
+    isValid = hasRole(auth.user?.roles, "Admin");
   }
 
   if (isValid) {
     return <Outlet />;
   }
-  return <NotFound />;
+
+  return props.redirect ? (
+    <Navigate to={props.redirect} replace={true} />
+  ) : (
+    <NotFound />
+  );
 };
 
 export default Protected;

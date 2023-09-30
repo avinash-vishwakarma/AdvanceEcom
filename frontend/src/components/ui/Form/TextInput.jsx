@@ -1,6 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 
-const TextInput = ({ name, placeholder }) => {
+const TextInput = ({ name, placeholder, value }) => {
+  const [textValue, setTextValue] = useState(value || "");
+
+  const updateInputValue = (e) => {
+    setTextValue(e.target.value);
+  };
+
   return (
     <div className="form-group text-start mb-3">
       <input
@@ -8,6 +14,8 @@ const TextInput = ({ name, placeholder }) => {
         name={name}
         type="text"
         placeholder={placeholder}
+        value={textValue}
+        onChange={updateInputValue}
       />
     </div>
   );

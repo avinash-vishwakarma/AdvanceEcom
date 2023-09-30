@@ -3,11 +3,17 @@ import { createPortal } from "react-dom";
 import BackDrop from "../BackDrop";
 import NavSliderLink from "./NavSliderLink";
 import { useSelector } from "react-redux";
+import AdminSliderLinks from "./AdminSliderLinks.jsx";
+
+// Helpers
+import hasRole from "../../../Helper/hasRole";
 
 const NavSlider = ({ showSlider, closeSlider }) => {
   const [sliderClass, setSliderClass] = useState("");
 
   const auth = useSelector((store) => store.auth);
+
+  const isAdmin = hasRole(auth.user?.roles, "Admin");
 
   useEffect(() => {
     if (showSlider) {
@@ -46,7 +52,7 @@ const NavSlider = ({ showSlider, closeSlider }) => {
 
               {/* <!-- User Thumbnail --> */}
               <div className="user-profile">
-                <img src="img/bg-img/2.jpg" alt="" />
+                <img src="/img/bg-img/2.jpg" alt="" />
               </div>
 
               {/* <!-- User Info --> */}
@@ -74,6 +80,8 @@ const NavSlider = ({ showSlider, closeSlider }) => {
                   text="Register"
                 />
               )}
+
+              {isAdmin && <AdminSliderLinks />}
 
               {auth.isLogin && (
                 <NavSliderLink

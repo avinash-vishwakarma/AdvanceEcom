@@ -3,8 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminCategoryController;
-use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\Auth\Custom\CustomAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,4 +17,10 @@ use App\Http\Controllers\Auth\Custom\CustomAuthController;
 
 
 
-Route::middleware(['auth:sanctum'])->get('/user',[CustomAuthController::class,'user']);
+
+// admin routes
+
+Route::middleware(['auth:sanctum','can:admin'])->prefix('/admin')->group(function(){
+    // admin category routes
+    Route::resource('/category',AdminCategoryController::class)->except(['create',"edit"]);
+});

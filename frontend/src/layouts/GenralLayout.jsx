@@ -20,7 +20,7 @@ const GenralLayout = () => {
         showSlider={showSlider}
         closeSlider={setShowSlider.bind(null, false)}
       />
-      <div className="page-content-wrapper">
+      <div className="page-content-wrapper py-3">
         <Outlet />
       </div>
       <Footer />

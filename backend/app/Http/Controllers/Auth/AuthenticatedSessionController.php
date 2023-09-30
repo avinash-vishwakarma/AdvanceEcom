@@ -19,7 +19,9 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        $user = $request->user();
+        $user = $request->user()->load(['roles'=>function($query){
+            $query->select('name','slug');
+        }]);
 
         return response()->json($user);
     }
