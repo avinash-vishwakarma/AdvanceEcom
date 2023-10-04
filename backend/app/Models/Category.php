@@ -2,12 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Category extends Model
 {
     use HasFactory;
 
     protected $fillable = ['name','slug','icon'];
+
+    protected $hidden = ["pivot"];
+
+    public function products(){
+        return $this->belongsToMany(Product::class);
+    }
 }

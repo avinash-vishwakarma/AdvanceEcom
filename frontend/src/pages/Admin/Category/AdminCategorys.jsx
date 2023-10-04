@@ -21,7 +21,7 @@ const CategoryListItem = ({ name, icon, id, onRemove }) => {
 
   return (
     <li className="list-group-item d-flex align-items-center justify-content-between">
-      <Link className="d-flex">
+      <Link className="d-flex" to={`/admin/products?category=${id}`}>
         <i className={`${icon} mx-2 d-block`} />
         {name}
       </Link>

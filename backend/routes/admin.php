@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminCategoryController;
 
 /*
@@ -23,4 +24,5 @@ use App\Http\Controllers\Admin\AdminCategoryController;
 Route::middleware(['auth:sanctum','can:admin'])->prefix('/admin')->group(function(){
     // admin category routes
     Route::resource('/category',AdminCategoryController::class)->except(['create',"edit"]);
+    Route::resource("/product",AdminProductController::class)->except(['create','edit']);
 });

@@ -32,6 +32,13 @@ import AdminCategorys from "./pages/Admin/Category/AdminCategorys";
 import cateoryPageLoader from "./loaders/categoryPageLoader";
 import AdminUpdateCategory from "./pages/Admin/Category/AdminUpdateCategory";
 import adminUpdateLoader from "./loaders/adminUpdateLoader";
+import AdminAddProduct from "./pages/Admin/Product/AdminAddProduct";
+import AdminShowProduct from "./pages/Admin/Product/AdminShowProduct";
+import adminProductLoader from "./loaders/adminProductLoader";
+import AdminProductsList from "./pages/Admin/Product/AdminProductsList";
+import adminProductsLoader from "./loaders/adminProductsLoader";
+import AdminProductEdit from "./pages/Admin/Product/AdminProductEdit";
+import adminEditProductCategorysLoader from "./loaders/adminEditProductCategorysLoader";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -105,6 +112,28 @@ const App = () => {
                   path="update/:id"
                   loader={adminUpdateLoader}
                   element={<AdminUpdateCategory />}
+                />
+              </Route>
+              <Route
+                path="products"
+                loader={adminProductsLoader}
+                element={<AdminProductsList />}
+              />
+              <Route path="product">
+                <Route
+                  path=":id"
+                  loader={adminProductLoader}
+                  element={<AdminShowProduct />}
+                />
+                <Route
+                  path="add"
+                  loader={cateoryPageLoader}
+                  element={<AdminAddProduct />}
+                />
+                <Route
+                  path="edit/:id"
+                  loader={adminEditProductCategorysLoader}
+                  element={<AdminProductEdit />}
                 />
               </Route>
             </Route>

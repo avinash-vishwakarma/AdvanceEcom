@@ -8,6 +8,10 @@ const AdminDashBoard = () => {
         Product Categorys
         <i className="bi bi-caret-right-fill fz-12"></i>
       </Link>
+      <Link className="affan-element-item" to="/admin/product/add">
+        Create Products
+        <i className="bi bi-caret-right-fill fz-12"></i>
+      </Link>
     </div>
   );
 };

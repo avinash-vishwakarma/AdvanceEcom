@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const TextInput = ({ name, placeholder, value }) => {
+const TextInput = ({ name, placeholder, value, title }) => {
   const [textValue, setTextValue] = useState(value || "");
 
   const updateInputValue = (e) => {
@@ -9,6 +9,7 @@ const TextInput = ({ name, placeholder, value }) => {
 
   return (
     <div className="form-group text-start mb-3">
+      {title && <label className="form-label">{title}</label>}
       <input
         className="form-control"
         name={name}
