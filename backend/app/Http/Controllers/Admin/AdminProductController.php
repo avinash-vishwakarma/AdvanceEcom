@@ -45,7 +45,18 @@ class AdminProductController extends Controller
             "heading"=>"required"
         ]);
         
+        $filesPathArray = [];
+
+        foreach ($request->files as $file) {
+            $fileName = time()."_".rand(10,1000).$file->getClientOriginalName();
+            $file->move(public_path("images/ProductImages/"),$fileName);
+            array_push($filesPathArray,$fileName);
+        }
+
+
         $product = Product::create($request->except("categorys"));
+        $product->images = json_encode($filesPathArray);
+        $product->save();
         $product->categorys()->attach(json_decode($request->categorys));
         return response()->json($product);
     }
