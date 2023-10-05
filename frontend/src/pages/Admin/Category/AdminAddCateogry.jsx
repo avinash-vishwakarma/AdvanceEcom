@@ -3,6 +3,7 @@ import TextInput from "../../../components/ui/Form/TextInput";
 import Button from "../../../components/ui/Genral/Button";
 import useSendRequest from "../../../hooks/useSendRequest";
 import { useNavigate } from "react-router-dom";
+import Alert from "../../../components/ui/Form/Alert";
 
 const AdminAddCateogry = ({}) => {
   const [request, isLoading, response, error] = useSendRequest();
@@ -41,6 +42,7 @@ const AdminAddCateogry = ({}) => {
 
       <div className="card">
         <div className="card-body">
+          <Alert error={error} />
           <form onSubmit={addCategoryHandler}>
             <TextInput placeholder="Enter Category Name" name="name" />
             <TextInput placeholder="Enter Icon Class" name="icon" />

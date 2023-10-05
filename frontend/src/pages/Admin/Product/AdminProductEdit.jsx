@@ -7,6 +7,7 @@ import Button from "../../../components/ui/Genral/Button";
 import useSendRequest from "../../../hooks/useSendRequest";
 import { useDispatch } from "react-redux";
 import Alert from "../../../components/ui/Form/Alert";
+import UploadImageSlider from "../../../components/ui/Swiper/UploadImageSlider";
 
 const AdminAddProduct = () => {
   const { product, categorys } = useLoaderData();
@@ -14,6 +15,7 @@ const AdminAddProduct = () => {
   const dispatch = useDispatch();
   const [request, isLoading, response, error] = useSendRequest();
   const navigate = useNavigate();
+  const [images, setImages] = useState(product.images);
 
   const editProductHandler = (e) => {
     e.preventDefault();
@@ -27,6 +29,12 @@ const AdminAddProduct = () => {
       "categorys",
       JSON.stringify(selectedCategorys.map((category) => category.id))
     );
+
+    images.forEach((image, index) => {
+      if (!image.id) {
+        productFormData.append(`image${index}`, image);
+      }
+    });
 
     productFormData.append("_method", "put");
     request({
@@ -75,6 +83,10 @@ const AdminAddProduct = () => {
     <div className="container">
       <div className="element-heading">
         <h6>Update Product</h6>
+      </div>
+
+      <div>
+        <UploadImageSlider images={images} setImages={setImages} />
       </div>
 
       {selectedCategorys.length > 0 && (

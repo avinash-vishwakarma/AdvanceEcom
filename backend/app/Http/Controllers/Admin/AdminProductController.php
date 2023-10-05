@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Image;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
+
 
 class AdminProductController extends Controller
 {
@@ -44,19 +47,8 @@ class AdminProductController extends Controller
             "categorys"=>"required",
             "heading"=>"required"
         ]);
-        
-        $filesPathArray = [];
-
-        foreach ($request->files as $file) {
-            $fileName = time()."_".rand(10,1000).$file->getClientOriginalName();
-            $file->move(public_path("images/ProductImages/"),$fileName);
-            array_push($filesPathArray,$fileName);
-        }
-
-
         $product = Product::create($request->except("categorys"));
-        $product->images = json_encode($filesPathArray);
-        $product->save();
+        $product->addImages($request->files);
         $product->categorys()->attach(json_decode($request->categorys));
         return response()->json($product);
     }
@@ -69,7 +61,7 @@ class AdminProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::with('categorys')->findOrFail($id);
+        $product = Product::with(["categorys","images"])->findOrFail($id);
         return response()->json($product);
     }
 
@@ -94,6 +86,7 @@ class AdminProductController extends Controller
 
         $Updatedproduct = Product::findOrFail($id);
         $Updatedproduct->update($request->except('categorys'));
+        $Updatedproduct->addImages($request->files);
         $Updatedproduct->categorys()->sync(json_decode($request->categorys));
         return response()->json($Updatedproduct);
     }
@@ -104,9 +97,26 @@ class AdminProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request , $id)
     {
+
+        $isImage = $request->query("image");
+
+        if($isImage){
+            $image = Image::findOrFail($id);
+            if(File::exists(public_path("/images/ProductImages/").$image->path)){
+                File::delete(public_path("/images/ProductImages/").$image->path);
+            }
+            // $image->delete();
+            return response()->json(["message"=>"Image Deleted"]);
+        }
+
         $product = Product::findOrFail($id);
+        foreach($product->images as $image){
+            if(File::exists(public_path("/images/ProductImages/").$image->path)){
+                File::delete(public_path("/images/ProductImages/").$image->path);
+            }
+        }
         $product->categorys()->detach();
         $product->delete();
         return response()->json([ "message"=>"Product Deleted Successfully" ]);
