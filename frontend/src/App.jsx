@@ -39,13 +39,16 @@ import AdminProductsList from "./pages/Admin/Product/AdminProductsList";
 import adminProductsLoader from "./loaders/adminProductsLoader";
 import AdminProductEdit from "./pages/Admin/Product/AdminProductEdit";
 import adminEditProductCategorysLoader from "./loaders/adminEditProductCategorysLoader";
+import AdminBanners from "./pages/Admin/ui/AdminBanners";
+import adminBannersLoader from "./loaders/adminBannersLoader";
+import homePageLoader from "./loaders/user/homePageLoader";
 
 const App = () => {
   const dispatch = useDispatch();
 
   const rootPageLoader = () => {
     axios.defaults.baseURL =
-      import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+      import.meta.env.VITE_REACT_APP_API_BASE_URL || "http://127.0.0.1:8000";
     axios.defaults.withCredentials = true;
 
     axios.get("/sanctum/csrf-cookie").catch((err) => {
@@ -81,7 +84,7 @@ const App = () => {
       <Route path="/" loader={rootPageLoader} element={<RootLayout />}>
         {/* genralLayout */}
         <Route element={<GenralLayout />}>
-          <Route index element={<Home />} />
+          <Route index loader={homePageLoader} element={<Home />} />
         </Route>
         {/* guest */}
         <Route element={<Protected guest />}>
@@ -134,6 +137,15 @@ const App = () => {
                   path="edit/:id"
                   loader={adminEditProductCategorysLoader}
                   element={<AdminProductEdit />}
+                />
+              </Route>
+
+              <Route path="ui">
+                <Route index element={<NotFound />} />
+                <Route
+                  path="banners"
+                  loader={adminBannersLoader}
+                  element={<AdminBanners />}
                 />
               </Route>
             </Route>

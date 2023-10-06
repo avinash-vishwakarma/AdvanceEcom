@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\GenralController;
 use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\Custom\CustomAuthController;
@@ -20,3 +21,9 @@ use App\Http\Controllers\Auth\Custom\CustomAuthController;
 
 
 Route::middleware(['auth:sanctum'])->get('/user',[CustomAuthController::class,'user']);
+
+Route::controller(GenralController::class)->group(function(){
+    Route::get('/banners','getBanners');
+    Route::get("/cateogrys",'getCategorys');
+});
+

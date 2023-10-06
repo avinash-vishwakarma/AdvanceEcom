@@ -33,7 +33,7 @@ class UserTableSeeder extends Seeder
         User::create([
             "email"=>"user@user.com",
             "name"=>"normal user",
-            "password"=> Hash::make("normal@normal.com"),
+            "password"=> Hash::make("user@user.com"),
             "email_verified_at"=>now()
         ]);
 

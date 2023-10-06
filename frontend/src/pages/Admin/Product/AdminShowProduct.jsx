@@ -42,7 +42,7 @@ const AdminShowProduct = () => {
 
       <Swiper>
         {product.images.map((image) => (
-          <SwiperSlide>
+          <SwiperSlide key={image.id}>
             <img
               src={`${
                 import.meta.env.VITE_REACT_APP_API_BASE_URL
@@ -82,7 +82,9 @@ const AdminShowProduct = () => {
             <h5>Categorys</h5>
             <div>
               {product.categorys.map((cateory) => (
-                <span className="m-1 badge bg-primary">{cateory.name}</span>
+                <span className="m-1 badge bg-primary" key={cateory.id}>
+                  {cateory.name}
+                </span>
               ))}
             </div>
           </div>

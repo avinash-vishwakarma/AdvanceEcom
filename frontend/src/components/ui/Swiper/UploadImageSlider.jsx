@@ -53,7 +53,8 @@ const UploadImageSlider = ({ images, setImages }) => {
               </RoundButton>
               <img
                 src={`${
-                  import.meta.env.VITE_API_BASE_URL || "http://localhost:8000"
+                  import.meta.env.VITE_REACT_APP_API_BASE_URL ||
+                  "http://localhost:8000"
                 }/images/ProductImages/${image.path}`}
               />
             </SwiperSlide>

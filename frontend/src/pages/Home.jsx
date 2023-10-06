@@ -1,10 +1,23 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useLoaderData } from "react-router-dom";
+// Conponents
+import Banners from "../components/ui/Swiper/Banners";
+import CategorysList from "../components/Functional/CategorysList";
 
 const Home = () => {
-  const auth = useSelector((store) => store.auth);
-  console.log(auth);
-  return <div>welcome to home page</div>;
+  const banners = useLoaderData();
+
+  return (
+    <>
+      <Banners images={banners} />
+      <div className="container">
+        <div class="element-heading">
+          <h6>Find From Categorys</h6>
+        </div>
+        <CategorysList />
+      </div>
+    </>
+  );
 };
 
 export default Home;
