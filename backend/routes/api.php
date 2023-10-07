@@ -25,5 +25,9 @@ Route::middleware(['auth:sanctum'])->get('/user',[CustomAuthController::class,'u
 Route::controller(GenralController::class)->group(function(){
     Route::get('/banners','getBanners');
     Route::get("/cateogrys",'getCategorys');
+    Route::get("/products","getProducts");
+    Route::get("/product/{id}",'getProductDetails');
 });
+
+
 

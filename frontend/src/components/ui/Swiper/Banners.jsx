@@ -7,7 +7,7 @@ import { Pagination } from "swiper/modules";
 const Banners = ({ images }) => {
   return (
     <Swiper
-      className="container mb-4"
+      className="mb-4"
       pagination={{
         dynamicBullets: true,
       }}
