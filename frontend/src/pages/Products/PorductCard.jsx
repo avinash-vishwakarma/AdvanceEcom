@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const PorductCard = ({ id, images, title, price }) => {
   return (
-    <div className="col-6 col-sm-4 col-lg-3">
+    <div className="col-6 col-sm-6 col-lg-6">
       <div className="card single-product-card">
         <Link to={`/product/${id}`}>
           <div className="card-body p-3">

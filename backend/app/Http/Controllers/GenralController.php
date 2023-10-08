@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\Category;
 use App\Models\BannerImage;
 use Illuminate\Http\Request;
@@ -26,16 +27,15 @@ class GenralController extends Controller
         $response = [];
         if($catId = $request->query("category")){
             $cateory = Category::findOrFail($catId);
-           $products = $cateory->products()->with('images')->where(["state"=>"active"])->get();
+           $products = $cateory->products()->with('images')->where(["state"=>"active"])->paginate(10);
            $response = [ "cateory"=>$cateory , "products"=>$products ];
         }
-
         return response()->json($response);
-
     }
 
 
     public function getProductDetails($id){
-        dd($request);        
+        $product = Product::with(['images','categorys'])->where(["id"=>$id , "state"=>"active"])->first();
+        return response()->json($product);
     }
 }
