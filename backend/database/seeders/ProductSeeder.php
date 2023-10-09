@@ -29,7 +29,7 @@ class ProductSeeder extends Seeder
                 "title"=>"sample title of product",
                 "heading"=>"this is a sample heading of the product thank you for visitin my website good mornning to the sosicnsklfnasd"
                 ,"description"=>"this is a sample heading of the product thank you for visitin my website good mornning to the sosicnsklfnasd this is a sample heading of the product thank you for visitin my website good mornning to the sosicnsklfnasd this is a sample heading of the product thank you for visitin my website good mornning to the sosicnsklfnasd",
-                "price"=>255
+                "price"=>255+$i
             ]);
     
             for($j = 0 ; $j<= 3 ; $j++){

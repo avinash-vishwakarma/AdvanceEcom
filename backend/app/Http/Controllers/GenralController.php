@@ -23,13 +23,32 @@ class GenralController extends Controller
 
     public function getProducts(Request $request){
         // case one cateogorys
-        $products = [];
-        $response = [];
-        if($catId = $request->query("category")){
-            $cateory = Category::findOrFail($catId);
-           $products = $cateory->products()->with('images')->where(["state"=>"active"])->paginate(10);
-           $response = [ "cateory"=>$cateory , "products"=>$products ];
+        $product;
+        $response=[];
+        $sort = $request->query('sort');
+
+        switch($sort){
+            case ("lth"):
+                $sort = ['price'=>'asc'];
+            break;
+            case ("htl"):
+                $sort = ["price"=>'desc'];
+                break;
+            default:
+            $sort = ['updated_at'=>'asc'];
         }
+
+
+        if($catId = $request->query("category")){
+            $category = Category::findOrFail($catId);
+            $response['category']= $category;
+            $product = $category->products()->with('images')->where("state","active");
+        }
+
+        foreach($sort as $key=>$value){
+            $product->orderBy($key,$value);
+        }
+        $response['products']=$product->paginate(10);
         return response()->json($response);
     }
 
