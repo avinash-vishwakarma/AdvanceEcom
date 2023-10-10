@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\BannerImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class GenralController extends Controller
 {
@@ -57,4 +59,6 @@ class GenralController extends Controller
         $product = Product::with(['images','categorys'])->where(["id"=>$id , "state"=>"active"])->first();
         return response()->json($product);
     }
+
+
 }

@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Cart;
 use App\Models\Role;
+use App\Models\Product;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -51,6 +53,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function hasRole($role){
         return ( bool )  $this->roles->where('slug',$role)->count();
     }
+
+    public function cart(){
+        return $this->hasMany(Cart::class);
+    }
+
 
 
 }

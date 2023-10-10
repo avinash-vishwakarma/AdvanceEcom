@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Cart;
 use App\Models\Image;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Model;
@@ -33,7 +34,6 @@ class Product extends Model
         }
         return $this;
     }
-
     
     
 }

@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GenralController;
+use App\Http\Controllers\UserCartController;
 use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\Custom\CustomAuthController;
@@ -20,7 +21,12 @@ use App\Http\Controllers\Auth\Custom\CustomAuthController;
 
 
 
-Route::middleware(['auth:sanctum'])->get('/user',[CustomAuthController::class,'user']);
+Route::middleware(['auth:sanctum'])->group(function(){
+    Route::get('/user',[CustomAuthController::class,'user']);
+    Route::controller(UserCartController::class)->group(function(){
+        Route::put("/cart",'addToCart');
+    });
+});
 
 Route::controller(GenralController::class)->group(function(){
     Route::get('/banners','getBanners');
@@ -30,4 +36,4 @@ Route::controller(GenralController::class)->group(function(){
 });
 
 
-
+Route::get("/test",[GenralController::class , 'testingController']);

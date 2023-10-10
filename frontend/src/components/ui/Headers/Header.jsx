@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Header = ({ toggleSlider }) => {
   return (
@@ -8,9 +9,9 @@ const Header = ({ toggleSlider }) => {
         <div className="header-content header-style-five position-relative d-flex align-items-center justify-content-between">
           {/*  Logo Wrapper  */}
           <div className="logo-wrapper">
-            <a href="home.html">
+            <Link to="/">
               <img src="/img/core-img/logo.png" alt="" />
-            </a>
+            </Link>
           </div>
 
           {/*  Navbar Toggler  */}

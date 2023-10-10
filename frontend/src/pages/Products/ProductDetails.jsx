@@ -1,18 +1,67 @@
 import axios from "axios";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useLoaderData } from "react-router-dom";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
+import useSendRequest from "../../hooks/useSendRequest";
+import { useDispatch } from "react-redux";
+import { setToaster } from "../../app/stateSlice/toasterAlertStateSlice";
+import { updateCart } from "../../app/stateSlice/cartStateSlice";
+import Alert from "../../components/ui/Form/Alert";
+import Button from "../../components/ui/Genral/Button";
 
 const productDetailsLoader = async ({ params: { id } }) => {
+  axios.get("/api/test");
+
   const response = await axios.get(`/api/product/${id}`);
   return response.data;
 };
 
 const ProductDetails = () => {
   const product = useLoaderData();
+  const [quantity, setQuentity] = useState(1);
+  const [request, isLoading, response, error] = useSendRequest();
+  const dispatch = useDispatch();
+
+  const addToCardClickHandler = () => {
+    // take the quentity and add the item to the cart
+
+    if (+quantity === 0) {
+      dispatch(
+        setToaster({
+          type: "danger",
+          title: "Kindly Select quantity",
+          body: "quntity is zero no product added",
+        })
+      );
+    }
+
+    const addTocartForm = new FormData();
+    addTocartForm.append("quantity", quantity);
+    addTocartForm.append("product_id", product.id);
+    addTocartForm.append("_method", "put");
+
+    request({
+      url: "/api/cart",
+      method: "post",
+      data: addTocartForm,
+    });
+  };
+
+  useEffect(() => {
+    if (response) {
+      dispatch(updateCart(response.data));
+      dispatch(
+        setToaster({
+          type: "success",
+          title: "Product Added To Cart",
+          body: "Go to cart to have a look at cart",
+        })
+      );
+    }
+  }, [response]);
 
   return (
     <div className="container">
@@ -43,13 +92,14 @@ const ProductDetails = () => {
         </div>
       </div>
 
+      <Alert error={error} />
+
       <div className="card product-details-card mb-3 direction-rtl">
         <div className="card-body">
           <h3>{product.title}</h3>
           <h1>${product.price}</h1>
           <p>{product.heading}</p>
-          <form action="#">
-            <select
+          {/* <select
               className="form-select mb-3"
               id="chooseSize"
               name="chooseSize"
@@ -61,18 +111,27 @@ const ProductDetails = () => {
               <option value="2">Small</option>
               <option value="3">Medium</option>
               <option value="3">Large</option>
-            </select>
-            <div className="input-group">
-              <input
-                className="input-group-text form-control"
-                type="number"
-                value="1"
-              />
-              <button className="btn btn-primary w-50" type="submit">
-                Add to Cart
-              </button>
-            </div>
-          </form>
+            </select> */}
+          <div className="input-group">
+            <input
+              className="input-group-text form-control"
+              type="number"
+              value={quantity}
+              onChange={(e) => {
+                setQuentity(e.target.value);
+              }}
+            />
+
+            <Button
+              isLoading={isLoading}
+              btnType="primary"
+              type="button"
+              btnClass="w-50"
+              onClick={addToCardClickHandler}
+            >
+              Add to Cart
+            </Button>
+          </div>
         </div>
       </div>
 
