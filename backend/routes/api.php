@@ -23,8 +23,9 @@ use App\Http\Controllers\Auth\Custom\CustomAuthController;
 
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/user',[CustomAuthController::class,'user']);
-    Route::controller(UserCartController::class)->group(function(){
-        Route::put("/cart",'addToCart');
+    Route::controller(UserCartController::class)->prefix('/cart')->group(function(){
+        Route::get("",'show');
+        Route::put("",'update');
     });
 });
 
@@ -36,4 +37,3 @@ Route::controller(GenralController::class)->group(function(){
 });
 
 
-Route::get("/test",[GenralController::class , 'testingController']);

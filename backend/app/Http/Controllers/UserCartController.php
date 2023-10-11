@@ -6,11 +6,12 @@ use App\Models\Cart;
 use App\Models\User;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class UserCartController extends Controller
 {
-    public function addToCart(Request $request){
+    public function update(Request $request){
         $request->validate([
             'product_id'=>"required",
             "quantity"=>"required"
@@ -34,5 +35,12 @@ class UserCartController extends Controller
         }
         // new cart item added 
         return response()->json(["status"=>"item added to cart"]);
+    }
+
+    public function show(){
+        $cart = Auth::user()->cart()->with(['product'=>function($query){
+            $query->select('title','price','id')->with('images');
+        }])->get();
+        return response()->json($cart);
     }
 }

@@ -30,16 +30,16 @@ const Footer = () => {
             </li>
 
             <li>
-              <a href="chat-users.html">
-                <i className="bi bi-chat-dots"></i>
-                <span>Chat</span>
-              </a>
-            </li>
-
-            <li>
               <NavLink to="/user-profile">
                 <i className="bi bi-person-circle"></i>
                 <span>Profile</span>
+              </NavLink>
+            </li>
+
+            <li>
+              <NavLink to="/my-cart">
+                <i className="bi bi-cart"></i>
+                <span>Cart</span>
               </NavLink>
             </li>
           </ul>

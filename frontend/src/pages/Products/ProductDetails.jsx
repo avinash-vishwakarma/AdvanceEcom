@@ -13,8 +13,6 @@ import Alert from "../../components/ui/Form/Alert";
 import Button from "../../components/ui/Genral/Button";
 
 const productDetailsLoader = async ({ params: { id } }) => {
-  axios.get("/api/test");
-
   const response = await axios.get(`/api/product/${id}`);
   return response.data;
 };

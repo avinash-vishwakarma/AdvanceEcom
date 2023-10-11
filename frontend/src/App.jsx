@@ -22,6 +22,7 @@ import AdminRoutes from "./Routes/Admin/AdminRoutes";
 import { useDispatch } from "react-redux";
 import { login, logout, setUser } from "./app/stateSlice/authStateSlice";
 import axios from "axios";
+import UserRoute from "./Routes/UserRoutes";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -64,6 +65,7 @@ const App = () => {
         {/* Genral Layout */}
         {GenralRoutes}
 
+        {UserRoute}
         {/* auth routes */}
         {AuthRoutes}
         {/* admin Routes */}
