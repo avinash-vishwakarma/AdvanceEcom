@@ -30,7 +30,8 @@ class Cart extends Model
 
         $cartValue = Auth::user()->cart()->sum('total');
 
-        return response()->json([ 'cart'=>$cart , "total"=>$cartValue ]);
+
+        return [ 'cart'=>$cart , "total"=>$cartValue ];
     }
 
 }

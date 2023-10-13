@@ -54,8 +54,6 @@ class UserCartController extends Controller
     public function delete($id){
         $cartItem = Auth::user()->cart()->where("id",$id)->first();
         $cartItem->delete();
-        // return response()->json(["status"=>"cart item deleted"]);
         return Cart::getCartData();
-
     }
 }
