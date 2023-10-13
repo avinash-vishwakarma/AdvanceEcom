@@ -26,6 +26,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::controller(UserCartController::class)->prefix('/cart')->group(function(){
         Route::get("",'show');
         Route::put("",'update');
+        Route::delete("/{id}","delete");
     });
 });
 

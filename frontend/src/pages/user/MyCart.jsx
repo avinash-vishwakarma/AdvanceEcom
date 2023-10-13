@@ -1,6 +1,6 @@
 import axios from "axios";
-import React from "react";
-import { useLoaderData } from "react-router-dom";
+import React, { useState } from "react";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import Button from "../../components/ui/Genral/Button";
 
 const myCartLoader = async () => {
@@ -8,10 +8,68 @@ const myCartLoader = async () => {
   return response.data;
 };
 
-const MyCart = () => {
-  const cartData = useLoaderData();
+const CartItem = ({ product, onDelete }) => {
+  const [productQuentity, setProductQuentity] = useState(product.quantity);
+  const navigate = useNavigate();
 
-  console.log(cartData);
+  const quantityChangeHandler = (e) => {
+    const quantityValue = e.target.value;
+
+    if (+quantityValue) {
+      // send a request to change the value in cart
+    }
+    setProductQuentity(quantityValue);
+  };
+
+  const removeProductHandler = () => {
+    axios.delete(`api/cart/${product.id}`).then((response) => {
+      onDelete(response.data);
+    });
+  };
+
+  return (
+    <tr>
+      <th scope="row">
+        <img
+          src={`${
+            import.meta.env.VITE_REACT_APP_API_BASE_URL
+          }/images/ProductImages/${product.product.images[0].path}`}
+          alt=""
+        />
+      </th>
+      <td>
+        <h6 className="mb-1">{product.product.title}</h6>
+        <span>${product.product.price}</span>
+      </td>
+      <td>
+        <div className="quantity">
+          <input
+            className="qty-text"
+            type="text"
+            onChange={quantityChangeHandler}
+            value={productQuentity}
+          />
+        </div>
+      </td>
+
+      <td>
+        <h6>{product.total}</h6>
+      </td>
+      <td>
+        <span className="remove-product" onClick={removeProductHandler}>
+          <i className="bi bi-x-lg"></i>
+        </span>
+      </td>
+    </tr>
+  );
+};
+
+const MyCart = () => {
+  const [{ cart, total }, setCartData] = useState(useLoaderData());
+
+  const cartChangeHandler = (cartData) => {
+    setCartData(cartData);
+  };
 
   return (
     <div className="container">
@@ -25,76 +83,25 @@ const MyCart = () => {
                   <th scope="col">Image</th>
                   <th scope="col">Description</th>
                   <th scope="col">Quantity</th>
+                  <th scope="col">Total</th>
                   <th scope="col">Remove</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <th scope="row">
-                    <img src="img/bg-img/p1.jpg" alt="" />
-                  </th>
-                  <td>
-                    <h6 className="mb-1">Wooden Tool</h6>
-                    <span>$9.89 × 1</span>
-                  </td>
-                  <td>
-                    <div className="quantity">
-                      <input className="qty-text" type="text" value="1" />
-                    </div>
-                  </td>
-                  <td>
-                    <a className="remove-product" href="#">
-                      <i className="bi bi-x-lg"></i>
-                    </a>
-                  </td>
-                </tr>
-
-                <tr>
-                  <th scope="row">
-                    <img src="img/bg-img/p3.jpg" alt="" />
-                  </th>
-                  <td>
-                    <h6 className="mb-1">Black T-shirt</h6>
-                    <span>$10.99 × 2</span>
-                  </td>
-                  <td>
-                    <div className="quantity">
-                      <input className="qty-text" type="text" value="2" />
-                    </div>
-                  </td>
-                  <td>
-                    <a className="remove-product" href="#">
-                      <i className="bi bi-x-lg"></i>
-                    </a>
-                  </td>
-                </tr>
-
-                <tr>
-                  <th scope="row">
-                    <img src="img/bg-img/p5.jpg" alt="" />
-                  </th>
-                  <td>
-                    <h6 className="mb-1">Crispy Biscuit</h6>
-                    <span>$0.78 × 9</span>
-                  </td>
-                  <td>
-                    <div className="quantity">
-                      <input className="qty-text" type="text" value="9" />
-                    </div>
-                  </td>
-                  <td>
-                    <a className="remove-product" href="#">
-                      <i className="bi bi-x-lg"></i>
-                    </a>
-                  </td>
-                </tr>
+                {cart.map((product) => (
+                  <CartItem
+                    key={product.id}
+                    onDelete={cartChangeHandler}
+                    product={product}
+                  />
+                ))}
               </tbody>
             </table>
           </div>
 
           <div className="card-body border-top">
-            <Button type="button" btnType="danger" btnClass="w-100">
-              Pay
+            <Button type="button" btnType="danger" btnclassName="w-100">
+              Pay ${total}
             </Button>
           </div>
         </div>
