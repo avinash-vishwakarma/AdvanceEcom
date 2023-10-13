@@ -34,13 +34,22 @@ class UserCartController extends Controller
             $authUser->cart()->save($newCartItem);
         }
         // new cart item added 
-        return response()->json(["status"=>"item added to cart"]);
+        return Cart::getCartData();
     }
 
     public function show(){
         return Cart::getCartData();
     }
 
+
+    public function patchUpdate(Request $reqeust , $id){
+        $cartItem = Auth::user()->cart()->where('id',$id)->first();
+        $product = Product::findOrFail($cartItem->product_id);
+        $cartItem->quantity = $reqeust->quantity;
+        $cartItem->total = $reqeust->quantity * $product->price;
+        $cartItem->save();
+        return Cart::getCartData();
+    }
 
     public function delete($id){
         $cartItem = Auth::user()->cart()->where("id",$id)->first();

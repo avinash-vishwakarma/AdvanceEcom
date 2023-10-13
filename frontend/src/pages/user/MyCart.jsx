@@ -8,7 +8,7 @@ const myCartLoader = async () => {
   return response.data;
 };
 
-const CartItem = ({ product, onDelete }) => {
+const CartItem = ({ product, setCartData }) => {
   const [productQuentity, setProductQuentity] = useState(product.quantity);
   const navigate = useNavigate();
 
@@ -16,14 +16,23 @@ const CartItem = ({ product, onDelete }) => {
     const quantityValue = e.target.value;
 
     if (+quantityValue) {
-      // send a request to change the value in cart
+      // send the request to server to update the
+      const quantityFormData = new FormData();
+      quantityFormData.append("_method", "patch");
+      quantityFormData.append("quantity", quantityValue);
+
+      axios
+        .post(`api/cart/${product.id}`, quantityFormData)
+        .then((response) => {
+          setCartData(response.data);
+        });
     }
     setProductQuentity(quantityValue);
   };
 
   const removeProductHandler = () => {
     axios.delete(`api/cart/${product.id}`).then((response) => {
-      onDelete(response.data);
+      setCartData(response.data);
     });
   };
 
@@ -67,10 +76,6 @@ const CartItem = ({ product, onDelete }) => {
 const MyCart = () => {
   const [{ cart, total }, setCartData] = useState(useLoaderData());
 
-  const cartChangeHandler = (cartData) => {
-    setCartData(cartData);
-  };
-
   return (
     <div className="container">
       {/* <!-- Cart Wrapper --> */}
@@ -91,7 +96,7 @@ const MyCart = () => {
                 {cart.map((product) => (
                   <CartItem
                     key={product.id}
-                    onDelete={cartChangeHandler}
+                    setCartData={setCartData}
                     product={product}
                   />
                 ))}
