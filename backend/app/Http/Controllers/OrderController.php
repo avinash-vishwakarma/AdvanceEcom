@@ -29,10 +29,14 @@ class OrderController extends Controller
             "razorpay_signature"=>"required"
         ]);
 
+        $userCart = Cart::getCartData();
+
         $api = new Api(Config::get('values.razorpay_id'),Config::get('values.razorpay_secret_key'));        
         $paymentStatus = $api->payment->fetch($request->razorpay_payment_id);
         
-        dd($paymentStatus);
+        if($paymentStatus->amount == $userCart['total'] && $paymentStatus->status == "captured" ){
+            return response()->json(['status'=>"payment successful"]);
+        }
         
 
     }
