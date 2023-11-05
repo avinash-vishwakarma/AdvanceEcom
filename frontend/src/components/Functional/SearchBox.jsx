@@ -1,13 +1,16 @@
+import axios from "axios";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SearchBox = () => {
   const [searchText, setSearchTextUser] = useState("");
+  const navigate = useNavigate();
   const inputChangeHandler = (e) => {
     setSearchTextUser(e.target.value);
   };
 
-  const searchClickHandler = () => {
-    console.log(searchText);
+  const searchClickHandler = async () => {
+    navigate(`/products?search=${searchText}`);
   };
 
   return (

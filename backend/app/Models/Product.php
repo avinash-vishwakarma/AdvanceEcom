@@ -35,5 +35,9 @@ class Product extends Model
         return $this;
     }
     
+    public  static function  getValidProducts(){
+        return Self::with('images')->where("state","=",'active');
+    }
+
     
 }

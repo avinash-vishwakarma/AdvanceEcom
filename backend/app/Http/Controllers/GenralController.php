@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\BannerImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class GenralController extends Controller
@@ -42,10 +43,18 @@ class GenralController extends Controller
 
 
         if($catId = $request->query("category")){
+            // get products according to the categorys
             $category = Category::findOrFail($catId);
             $response['category']= $category;
             $product = $category->products()->with('images')->where("state","active");
+        }elseif($searchText = $request->query("search")){
+            $response['search_text'] = $searchText;
+            $product = Product::getValidProducts()->where(function($query) use ($searchText){
+                $query->where("title","LIKE","%".$searchText."%");
+                $query->orWhere("heading","LIKE","%".$searchText."%");
+            });
         }
+
 
         foreach($sort as $key=>$value){
             $product->orderBy($key,$value);

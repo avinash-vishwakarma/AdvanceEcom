@@ -1,7 +1,9 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import Button from "../../components/ui/Genral/Button";
+import { useDispatch, useSelector } from "react-redux";
+import { setToaster } from "../../app/stateSlice/toasterAlertStateSlice";
 
 const myCartLoader = async () => {
   const response = await axios("/api/cart");
@@ -75,6 +77,65 @@ const CartItem = ({ product, setCartData }) => {
 
 const MyCart = () => {
   const [{ cart, total }, setCartData] = useState(useLoaderData());
+  const auth = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const paymentConfirmationHandler = (response) => {
+    console.log(response);
+    axios.postForm("/api/confrim-payment", response).then((confResponse) => {
+      dispatch(
+        setToaster({
+          type: "success",
+          title: "payment successfull",
+          body: "You can track you order in My Orders section",
+        })
+      );
+      navigate("/my-orders", {
+        replace: true,
+      });
+    });
+  };
+
+  const placeOrderHanlder = () => {
+    axios.post("/api/place-order").then(({ data }) => {
+      console.log(data);
+      const options = {
+        key: import.meta.env.VITE_REACT_APP_RAZORPAY_PUBLIC_KEY,
+        currency: data.currency,
+        amount: +data.amount,
+        name: "Learning To Code Online",
+        description: "Test Wallet Transaction",
+        order_id: data.id,
+        handler: paymentConfirmationHandler,
+        prefill: {
+          name: auth.user.name,
+          email: auth.user.email,
+          number: "7000789511",
+        },
+      };
+
+      const paymentObeject = new window.Razorpay(options);
+      paymentObeject.open();
+    });
+  };
+
+  const loadScript = (src) => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = src;
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+      document.body.appendChild(script);
+    });
+  };
+
+  useEffect(() => {
+    loadScript("https://checkout.razorpay.com/v1/checkout.js");
+  }, []);
 
   return (
     <div className="container">
@@ -105,7 +166,12 @@ const MyCart = () => {
           </div>
 
           <div className="card-body border-top">
-            <Button type="button" btnType="danger" btnclassName="w-100">
+            <Button
+              type="button"
+              btnType="danger"
+              onClick={placeOrderHanlder}
+              btnclassName="w-100"
+            >
               Pay ${total}
             </Button>
           </div>

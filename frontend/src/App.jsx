@@ -20,7 +20,7 @@ import GenralRoutes from "./Routes/GenralRoutes";
 import AdminRoutes from "./Routes/Admin/AdminRoutes";
 // loaders
 import { useDispatch } from "react-redux";
-import { login, logout, setUser } from "./app/stateSlice/authStateSlice";
+import { login, setUser } from "./app/stateSlice/authStateSlice";
 import axios from "axios";
 import UserRoute from "./Routes/UserRoutes";
 
